@@ -1,24 +1,45 @@
-# dist: trusty
-# sudo: false
+# # dist: trusty
+# # sudo: false
+
+# language: node_js
+# node_js:
+#   - "13"
+
+# addons:
+#   apt:
+#     sources:
+#       - google-chrome
+#     packages:
+#       - google-chrome-stable
+
+# cache:
+#   directories:
+#      - ./node_modules
+
+# install:
+#   - npm install
+
+# script:
+#   - npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
+#   - npm run e2e -- --protractor-config=e2e/protractor-ci.conf.js
 
 language: node_js
 node_js:
-  - "13"
-
+  - 13
 addons:
   apt:
-    sources:
-      - google-chrome
     packages:
-      - google-chrome-stable
-
+      # Ubuntu 16+ does not install this dependency by default, so we need to install it ourselves
+      - libgconf-2-4
 cache:
+  # Caches $HOME/.npm when npm ci is default script command
+  # Caches node_modules in all other cases
+  npm: true
   directories:
-     - ./node_modules
-
+    # we also need to cache folder with Cypress binary
+    - ~/.cache
 install:
-  - npm install
-
+  - npm ci
 script:
-  - npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
-  - npm run e2e -- --protractor-config=e2e/protractor-ci.conf.js
+  # - npm run e2e
+  - npm run test
