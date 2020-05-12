@@ -1,9 +1,20 @@
-# # dist: trusty
-# # sudo: false
+dist: trusty
+sudo: required
 
-# language: node_js
-# node_js:
-#   - "13"
+language: node_js
+node_js:
+  - "13"
+
+branches:
+  only:
+  - master
+
+before_script:
+  - npm install -g @angular/cli
+
+script:
+  - ng lint
+  - npm run test-headless
 
 # addons:
 #   apt:
@@ -22,24 +33,3 @@
 # script:
 #   - npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
 #   - npm run e2e -- --protractor-config=e2e/protractor-ci.conf.js
-
-language: node_js
-node_js:
-  - 13
-addons:
-  apt:
-    packages:
-      # Ubuntu 16+ does not install this dependency by default, so we need to install it ourselves
-      - libgconf-2-4
-cache:
-  # Caches $HOME/.npm when npm ci is default script command
-  # Caches node_modules in all other cases
-  npm: true
-  directories:
-    # we also need to cache folder with Cypress binary
-    - ~/.cache
-install:
-  - npm ci
-script:
-  # - npm run e2e
-  - npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
